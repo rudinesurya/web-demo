@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Dropdown, Pagination } from 'semantic-ui-react';
 import DataGrid from './DataGrid';
+import Toolbar from './Toolbar';
 
 const UserDataGrid = ({ data, rowsCount }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,47 +62,21 @@ const UserDataGrid = ({ data, rowsCount }) => {
   const indexOfFirst = indexOfLast - rowsCount;
   const activePageData = sortedData.slice(indexOfFirst, indexOfLast);
 
-  const options = [
-    { key: 'name', text: 'Name', value: 'name' },
-    { key: 'jobDescription', text: 'Job', value: 'jobDescription' },
-    { key: 'userEmail', text: 'Email', value: 'userEmail' }
-  ];
-
   return (
     <div>
-      <Input
-        icon='users'
-        iconPosition='left'
-        type='text'
-        placeholder='Search...'
-        action={
-          <Dropdown
-            button
-            basic
-            floating
-            options={options}
-            defaultValue='name'
-            onChange={(event, data) => setSearchCatagory(data.value)}
-          />
-        }
-        value={searchTerm}
-        onChange={event => setSearchTerm(event.target.value)}
+      <Toolbar
+        searchTerm={searchTerm}
+        searchCategory={searchCategory}
+        onSearchTermChange={setSearchTerm}
+        onSearchCategoryChange={setSearchCatagory}
       />
       <DataGrid
         data={activePageData}
         selectedColumn={selectedColumn}
         setSelectedColumn={handleSelectColumn}
         direction={direction}
-      />
-      <Pagination
-        boundaryRange={0}
-        defaultActivePage={1}
-        ellipsisItem={null}
-        firstItem={null}
-        lastItem={null}
-        siblingRange={1}
         totalPages={totalPages}
-        onPageChange={(event, data) => setActivePage(data.activePage)}
+        onPageChange={setActivePage}
       />
     </div>
   );

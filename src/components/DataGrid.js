@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'semantic-ui-react';
+import { Table, Pagination } from 'semantic-ui-react';
 
-const DataGrid = ({ data, selectedColumn, setSelectedColumn, direction }) => {
+const DataGrid = ({
+  data,
+  selectedColumn,
+  setSelectedColumn,
+  direction,
+  totalPages,
+  onPageChange
+}) => {
   return (
     <div>
       <Table sortable celled fixed>
@@ -51,6 +58,17 @@ const DataGrid = ({ data, selectedColumn, setSelectedColumn, direction }) => {
           })}
         </Table.Body>
       </Table>
+
+      <Pagination
+        boundaryRange={0}
+        defaultActivePage={1}
+        ellipsisItem={null}
+        firstItem={null}
+        lastItem={null}
+        siblingRange={1}
+        totalPages={totalPages}
+        onPageChange={(event, data) => onPageChange(data.activePage)}
+      />
     </div>
   );
 };
@@ -59,7 +77,9 @@ DataGrid.propTypes = {
   data: PropTypes.array,
   selectedColumn: PropTypes.string,
   setSelectedColumn: PropTypes.func,
-  direction: PropTypes.string
+  direction: PropTypes.string,
+  totalPages: PropTypes.number,
+  onPageChange: PropTypes.func
 };
 
 export default DataGrid;
