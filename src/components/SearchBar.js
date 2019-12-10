@@ -5,8 +5,7 @@ import { Input, Dropdown } from 'semantic-ui-react';
 const SearchBar = ({
   onSearchCategoryChange,
   onSearchTermChange,
-  searchTerm,
-  searchCategory
+  searchTerm
 }) => {
   const options = [
     { key: 'name', text: 'Name', value: 'name' },
