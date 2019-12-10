@@ -15,7 +15,7 @@ const UserListViewScreen = () => {
   return (
     <div>
       {errorMessage ? <p>{errorMessage}</p> : null}
-      <UserDataGrid data={users} rowsCount={10} />;
+      <UserDataGrid data={users} rowsCount={10} />
     </div>
   );
 };

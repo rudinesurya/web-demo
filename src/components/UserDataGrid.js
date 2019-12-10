@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Pagination } from 'semantic-ui-react';
+import { Input, Pagination } from 'semantic-ui-react';
 import DataGrid from './DataGrid';
-import SearchBar from './SearchBar';
 
 const UserDataGrid = ({ data, rowsCount }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const [activePage, setActivePage] = useState(1);
 
-  const totalPages = data.length / rowsCount;
+  useEffect(() => {
+    const results = data.filter(item =>
+      item.name.toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(results);
+    setActivePage(1);
+  }, [data, searchTerm]);
+
+  const totalPages = searchResults.length / rowsCount;
   const indexOfLast = activePage * rowsCount;
   const indexOfFirst = indexOfLast - rowsCount;
-  const activePageData = data.slice(indexOfFirst, indexOfLast);
+  const activePageData = searchResults.slice(indexOfFirst, indexOfLast);
 
   return (
     <div>
-      <SearchBar />
+      <Input
+        type='text'
+        placeholder='Search...'
+        value={searchTerm}
+        onChange={event => setSearchTerm(event.target.value)}
+      />
       <DataGrid data={activePageData} />
       <Pagination
         boundaryRange={0}
