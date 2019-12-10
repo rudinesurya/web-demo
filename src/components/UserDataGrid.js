@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Pagination } from 'semantic-ui-react';
+import { Input, Dropdown, Pagination } from 'semantic-ui-react';
 import DataGrid from './DataGrid';
 
 const UserDataGrid = ({ data, rowsCount }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchCategory, setSearchCatagory] = useState('name');
   const [searchResults, setSearchResults] = useState([]);
   const [prevColumn, setPrevColumn] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState('id');
@@ -22,11 +23,13 @@ const UserDataGrid = ({ data, rowsCount }) => {
     }
   });
 
+  // Triggered when either the data changes or user clicks on column headers to sort
   useEffect(() => {
     const temp = [...searchResults].sort((a, b) => {
       const x = a[selectedColumn];
       const y = b[selectedColumn];
 
+      // Special case to handle numeric comparison
       if (selectedColumn === 'id') {
         return x - y;
       }
@@ -40,25 +43,48 @@ const UserDataGrid = ({ data, rowsCount }) => {
     setSortedData(direction === 'ascending' ? temp : temp.reverse());
   }, [selectedColumn, direction, searchResults]);
 
-  // Triggered when user enters search term
+  // Triggered when user enters a new search term
   useEffect(() => {
     const results = data.filter(item =>
-      item.name.toLowerCase().includes(searchTerm)
+      item[searchCategory].toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
     setActivePage(1);
-  }, [data, searchTerm]);
+  }, [data, searchTerm, searchCategory]);
+
+  // Triggered when user change the search category
+  useEffect(() => {
+    setSearchTerm('');
+  }, [searchCategory]);
 
   const totalPages = sortedData.length / rowsCount;
   const indexOfLast = activePage * rowsCount;
   const indexOfFirst = indexOfLast - rowsCount;
   const activePageData = sortedData.slice(indexOfFirst, indexOfLast);
 
+  const options = [
+    { key: 'name', text: 'Name', value: 'name' },
+    { key: 'jobDescription', text: 'Job', value: 'jobDescription' },
+    { key: 'userEmail', text: 'Email', value: 'userEmail' }
+  ];
+
   return (
     <div>
       <Input
+        icon='users'
+        iconPosition='left'
         type='text'
         placeholder='Search...'
+        action={
+          <Dropdown
+            button
+            basic
+            floating
+            options={options}
+            defaultValue='name'
+            onChange={(event, data) => setSearchCatagory(data.value)}
+          />
+        }
         value={searchTerm}
         onChange={event => setSearchTerm(event.target.value)}
       />
