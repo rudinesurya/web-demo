@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
-import { Image, Item } from 'semantic-ui-react';
+import { Image, Item, Button } from 'semantic-ui-react';
+const UserExtraDetails = lazy(() => import('components/UserExtraDetails'));
 
 const UserDetailsScreen = props => {
   const [user, setUser] = useState(null);
@@ -24,25 +25,31 @@ const UserDetailsScreen = props => {
   if (user === null || user === undefined) return null;
 
   return (
-    <Item>
-      <Item.Image size='tiny' src={user.avatar} />
+    <Item.Group>
+      <Item>
+        <Item.Image size='small' src={user.avatar} />
 
-      <Item.Content>
-        <Item.Header as='a'>{user.name}</Item.Header>
-        <Item.Meta>Description</Item.Meta>
-        <Item.Description>
-          <p>{user.userEmail}</p>
-          <p>{user.jobDescription}</p>
-        </Item.Description>
-        <Item.Extra>Additional Details</Item.Extra>
-        <Item.Description>
-          <p>{user.id}</p>
-          <p>{user.createdAt}</p>
-          <p>{user.userIpAddress}</p>
-          <p>{user.userAgent}</p>
-        </Item.Description>
-      </Item.Content>
-    </Item>
+        <Item.Content>
+          <Item.Header as='a'>{user.name}</Item.Header>
+          <Item.Meta>Description</Item.Meta>
+          <Item.Description>
+            <p>email: {user.userEmail}</p>
+            <p>job: {user.jobDescription}</p>
+          </Item.Description>
+          <Item.Extra>Additional Details</Item.Extra>
+          <Item.Description>
+            <Suspense fallback={<h1>Still Loading…</h1>}>
+              <UserExtraDetails
+                id={user.id}
+                createdAt={user.createdAt}
+                userIpAddress={user.userIpAddress}
+                userAgent={user.userAgent}
+              />
+            </Suspense>
+          </Item.Description>
+        </Item.Content>
+      </Item>
+    </Item.Group>
   );
 };
 
