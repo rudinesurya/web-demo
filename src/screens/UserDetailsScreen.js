@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
 import { Image, Item } from 'semantic-ui-react';
-import UserExtraDetails from 'components/UserExtraDetails';
+const UserExtraDetails = React.lazy(() =>
+  import('components/UserExtraDetails')
+);
 
 const UserDetailsScreen = props => {
   const [user, setUser] = useState(null);
@@ -37,12 +39,14 @@ const UserDetailsScreen = props => {
         </Item.Description>
         <Item.Extra>Additional Details</Item.Extra>
         <Item.Description>
-          <UserExtraDetails
-            id={user.id}
-            createdAt={user.createdAt}
-            userIpAddress={user.userIpAddress}
-            userAgent={user.userAgent}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserExtraDetails
+              id={user.id}
+              createdAt={user.createdAt}
+              userIpAddress={user.userIpAddress}
+              userAgent={user.userAgent}
+            />
+          </Suspense>
         </Item.Description>
       </Item.Content>
     </Item>
