@@ -1,5 +1,5 @@
-import mockData from '../mock/users.json';
-import mockApi from '../api/MockApi';
+import mockData from 'mock/users.json';
+import mockApi from 'api/MockApi';
 
 const useMock = true;
 

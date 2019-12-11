@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import DataGrid from './DataGrid';
+import DataGrid from './Datagrid';
 import Toolbar from './Toolbar';
 
 const UserDataGrid = ({ data, rowsCount }) => {

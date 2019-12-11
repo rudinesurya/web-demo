@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsersAction } from '../reducers/userReducer';
+import { fetchUsersAction } from 'reducers/userReducer';
 
 const UserDetailsScreen = ({ navigation }) => {
   const users = useSelector(state => state.user.users);

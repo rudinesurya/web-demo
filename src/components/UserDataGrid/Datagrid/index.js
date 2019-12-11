@@ -5,7 +5,7 @@ import { Table, Pagination } from 'semantic-ui-react';
 const DataGrid = ({ data, rowsCount }) => {
   const [prevColumn, setPrevColumn] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState('id');
-  const [direction, setDirection] = useState(null);
+  const [direction, setDirection] = useState('ascending');
   const [sortedData, setSortedData] = useState([]);
   const [activePage, setActivePage] = useState(1);
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import UserDataGrid from '../components/UserDataGrid';
+import UserDataGrid from 'components/UserDataGrid';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsersAction } from '../reducers/userReducer';
+import { fetchUsersAction } from 'reducers/userReducer';
 
 const UserListViewScreen = () => {
   const users = useSelector(state => state.user.users);
