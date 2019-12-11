@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
 import { Image, Item } from 'semantic-ui-react';
+import UserExtraDetails from 'components/UserExtraDetails';
 
 const UserDetailsScreen = props => {
   const [user, setUser] = useState(null);
@@ -36,10 +37,12 @@ const UserDetailsScreen = props => {
         </Item.Description>
         <Item.Extra>Additional Details</Item.Extra>
         <Item.Description>
-          <p>{user.id}</p>
-          <p>{user.createdAt}</p>
-          <p>{user.userIpAddress}</p>
-          <p>{user.userAgent}</p>
+          <UserExtraDetails
+            id={user.id}
+            createdAt={user.createdAt}
+            userIpAddress={user.userIpAddress}
+            userAgent={user.userAgent}
+          />
         </Item.Description>
       </Item.Content>
     </Item>
