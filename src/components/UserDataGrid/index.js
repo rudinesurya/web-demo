@@ -24,6 +24,7 @@ const UserDataGrid = ({ data, rowsCount }) => {
   return (
     <div>
       <Toolbar
+        data={data}
         searchTerm={searchTerm}
         searchCategory={searchCategory}
         onSearchTermChange={setSearchTerm}

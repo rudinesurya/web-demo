@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Pagination } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Image, Table, Header, Pagination } from 'semantic-ui-react';
 
 const DataGrid = ({ data, rowsCount }) => {
   const [prevColumn, setPrevColumn] = useState(null);
@@ -85,26 +86,28 @@ const DataGrid = ({ data, rowsCount }) => {
         </Table.Header>
 
         <Table.Body>
-          {activePageData.map(({ id, name, jobDescription, userEmail }) => {
-            return (
-              <Table.Row key={id}>
-                <Table.Cell>{id}</Table.Cell>
-                <Table.Cell>{name}</Table.Cell>
-                <Table.Cell>{jobDescription}</Table.Cell>
-                <Table.Cell>{userEmail}</Table.Cell>
-              </Table.Row>
-            );
-          })}
+          {activePageData.map(
+            ({ id, name, jobDescription, userEmail, avatar }) => {
+              return (
+                <Table.Row key={id}>
+                  <Table.Cell>{id}</Table.Cell>
+                  <Table.Cell selectable>
+                    <Header as={Link} to={`/${id}`} image>
+                      <Image src={avatar} rounded size='mini' />
+                      <Header.Content>{name}</Header.Content>
+                    </Header>
+                  </Table.Cell>
+                  <Table.Cell>{jobDescription}</Table.Cell>
+                  <Table.Cell>{userEmail}</Table.Cell>
+                </Table.Row>
+              );
+            }
+          )}
         </Table.Body>
       </Table>
 
       <Pagination
-        boundaryRange={0}
         defaultActivePage={1}
-        ellipsisItem={null}
-        firstItem={null}
-        lastItem={null}
-        siblingRange={1}
         totalPages={totalPages}
         onPageChange={(event, data) => setActivePage(data.activePage)}
       />

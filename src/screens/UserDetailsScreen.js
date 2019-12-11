@@ -1,28 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
+import { Image, Item } from 'semantic-ui-react';
 
-const UserDetailsScreen = ({ navigation }) => {
+const UserDetailsScreen = props => {
+  const [user, setUser] = useState(null);
   const users = useSelector(state => state.user.users);
   const errorMessage = useSelector(state => state.user.error);
   const dispatch = useDispatch();
 
+  // Triggered once when screen load
   useEffect(() => {
     dispatch(fetchUsersAction());
   }, []);
 
-  const id = navigation.getParam('id');
-  const user = users.find(u => u.id === id);
+  // Triggered when data come in
+  useEffect(() => {
+    const id = props.match.params.id;
+    const temp = users.find(u => u.id === id);
+    setUser(temp);
+  }, [users]);
+
+  if (user === null || user === undefined) return null;
 
   return (
-    <div>
-      {errorMessage ? <p>{errorMessage}</p> : null}
-      <p>{user.id}</p>
-      <p>{user.name}</p>
-      <p>{user.userEmail}</p>
-      <p>{user.createdAt}</p>
-      <p>{user.userIpAddress}</p>
-    </div>
+    <Item>
+      <Item.Image size='tiny' src={user.avatar} />
+
+      <Item.Content>
+        <Item.Header as='a'>{user.name}</Item.Header>
+        <Item.Meta>Description</Item.Meta>
+        <Item.Description>
+          <p>{user.userEmail}</p>
+          <p>{user.jobDescription}</p>
+        </Item.Description>
+        <Item.Extra>Additional Details</Item.Extra>
+        <Item.Description>
+          <p>{user.id}</p>
+          <p>{user.createdAt}</p>
+          <p>{user.userIpAddress}</p>
+          <p>{user.userAgent}</p>
+        </Item.Description>
+      </Item.Content>
+    </Item>
   );
 };
 
