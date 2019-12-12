@@ -1,15 +1,24 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
 import { fetchLocationAction } from 'reducers/geoReducer';
-import { Container, Grid, Button, Form, Image, Item } from 'semantic-ui-react';
+import {
+  Container,
+  Grid,
+  Dimmer,
+  Loader,
+  Form,
+  Image
+} from 'semantic-ui-react';
 
 const UserDetailsScreen = props => {
   const [user, setUser] = useState(null);
   const [hidden, setHidden] = useState(true);
   const users = useSelector(state => state.user.users);
+  const pending = useSelector(state => state.user.pending);
   const location = useSelector(state => state.geo.location);
   const errorMessage = useSelector(state => state.user.error);
+  const geoErrorMessage = useSelector(state => state.geo.error);
   const dispatch = useDispatch();
 
   // Triggered once when screen load
@@ -22,15 +31,27 @@ const UserDetailsScreen = props => {
     const id = props.match.params.id;
     if (users !== null && users.length > 0) {
       const temp = users.find(u => u.id === id);
-      setUser(temp);
-      dispatch(fetchLocationAction(temp.userIpAddress));
+
+      if (temp) {
+        setUser(temp);
+        dispatch(fetchLocationAction(temp.userIpAddress));
+      }
     }
   }, [users]);
 
-  if (user === null || user === undefined) return null;
+  if (pending || user === null || user === undefined)
+    return (
+      <Container>
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      </Container>
+    );
 
   return (
     <Container>
+      {errorMessage ? <p>{errorMessage}</p> : null}
+      {geoErrorMessage ? <p>{geoErrorMessage}</p> : null}
       <Grid className='segment centered' columns='three'>
         <Grid.Row>
           <Image src={user.avatar} size='small' circular />

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SearchBar from './SearchBar';
-import { Menu, Button, Icon } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import { CSVLink } from 'react-csv';
 
 const Toolbar = ({
