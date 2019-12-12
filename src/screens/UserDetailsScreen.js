@@ -1,12 +1,14 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsersAction } from 'reducers/userReducer';
+import { fetchLocationAction } from 'reducers/geoReducer';
 import { Container, Grid, Button, Form, Image, Item } from 'semantic-ui-react';
 
 const UserDetailsScreen = props => {
   const [user, setUser] = useState(null);
   const [hidden, setHidden] = useState(true);
   const users = useSelector(state => state.user.users);
+  const location = useSelector(state => state.geo.location);
   const errorMessage = useSelector(state => state.user.error);
   const dispatch = useDispatch();
 
@@ -18,8 +20,11 @@ const UserDetailsScreen = props => {
   // Triggered when data come in
   useEffect(() => {
     const id = props.match.params.id;
-    const temp = users.find(u => u.id === id);
-    setUser(temp);
+    if (users !== null && users.length > 0) {
+      const temp = users.find(u => u.id === id);
+      setUser(temp);
+      dispatch(fetchLocationAction(temp.userIpAddress));
+    }
   }, [users]);
 
   if (user === null || user === undefined) return null;
@@ -59,6 +64,14 @@ const UserDetailsScreen = props => {
                 <Form.Field>
                   <label>IP Address</label>
                   <input value={user.userIpAddress} readOnly />
+                </Form.Field>
+                <Form.Field>
+                  <label>Country</label>
+                  <input value={location.country_name} readOnly />
+                </Form.Field>
+                <Form.Field>
+                  <label>City</label>
+                  <input value={location.city} readOnly />
                 </Form.Field>
                 <Form.Field>
                   <label>Agent</label>
