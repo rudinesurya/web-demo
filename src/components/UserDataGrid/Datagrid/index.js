@@ -52,7 +52,7 @@ const DataGrid = ({ data, rowsCount }) => {
 
   return (
     <div>
-      <Table sortable celled fixed>
+      <Table sortable padded>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell

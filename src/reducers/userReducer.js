@@ -1,8 +1,6 @@
 import mockData from 'mock/users.json';
 import mockApi from 'api/MockApi';
 
-const useMock = true;
-
 const initialState = {
   pending: false,
   users: [],
@@ -40,17 +38,11 @@ export const fetchUsersAction = () => async dispatch => {
       type: 'FETCH_USERS_PENDING'
     });
 
-    let data;
-    if (useMock) {
-      data = mockData;
-    } else {
-      const response = await mockApi.get('/posts');
-      data = response.data;
-    }
+    const response = await mockApi.get('/posts');
 
     dispatch({
       type: 'FETCH_USERS_SUCCESS',
-      payload: data
+      payload: response.data
     });
   } catch (err) {
     dispatch({
