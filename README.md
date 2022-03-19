@@ -1,1 +1,2 @@
-react, redux, grid
+react, redux
+master/detail screens
